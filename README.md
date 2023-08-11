@@ -28,7 +28,7 @@ sudo apt install git-all
 sudo apt install build-essential
 ```
 
-Em outras distribuições, pesquise como instala git e gcc nessas outras distribuições
+Em outras distribuições, pesquise como instala git e gcc na distribuição que você está usando
 
 Então com git e gcc instalados, entre em uma pasta e clone esse repositório
 
@@ -41,17 +41,28 @@ no vscode e aperte `f5` para ver o Hello World!
 
 ### Windows
 
+No windows você pode instalar o projeto MSYS2, que já vem com tanto o gcc quanto o git: https://www.msys2.org
+
+<details>
+<summary>Método antigo</summary>
 No windows, git provavelmente não esta instalado, baixe git no site oficial: https://git-scm.com/downloads
 
 Junto do git, será instalado o git-bash, você poderá clicar com o direito em qualquer pasta e abrir git-bash
 
 O git-bash é um terminal onde você pode executar comandos igual no linux, recomendo bastante
 
-No windows, gcc também provavelmente não estará instalado baixe desse site
+No windows, gcc também provavelmente não estará instalado baixe desse site o projeto MSYS2 que oferece suporte ao gcc em windows
 [https://sourceforge.net/projects/mingw-w64/...](https://sourceforge.net/projects/mingw-w64/files/Toolchains%20targetting%20Win64/Personal%20Builds/mingw-builds/8.1.0/threads-posix/seh/)
 escolha a versão `x86_64-posix-seh`
 
-Com o git e o mingw-w64 instalado você pode clonar o repositório, e então abrir o vscode
+O pacote **não** vem com um instalador, você tem que instalar manualmente
+
+Instalar manualmente neste caso significa adicionar o caminho da pasta bin para o PATH do seu computador, para que a linha de comando possa encontrar esses comandos
+
+E então o gcc vai funcionar
+</details>
+
+Com o git e o gcc instalado você pode clonar o repositório, e então abrir o vscode
 
 ```
 git clone https://github.com/kernel32dev/projeto-vazio-c
@@ -64,6 +75,13 @@ Eu não tenho um Mac, e não quero escrever coisas que não posso testar
 Se alguem quiser contribuir as instruções com um pull request, por favor mande
 
 Mas o processo é parecido com linux, instala git e gcc, e clona o repositório
+
+## Extensões
+
+As extensões do c/c++ do vscode, simplesmente permitem que o vscode analise os seus arquivos em c,
+elas **não** vão compilar o seu programa, e só são capazes de depurar o programa se ele já estiver compilado e com a informação de debug incluída
+
+Após esses passos certifique-se que você tenha as extensões instaladas,
 
 ## Executar o programa
 
@@ -85,7 +103,7 @@ O arquivo `Makefile` contem as instruções que o comando `make` lê para entend
 
 Você pode editar a primeira linha com `TARGET_EXEC` para mudar o nome do executável de `a` para alguma outra coisa
 
-O exe produzido sempre terá a extensão .exe, mesmo no linux onde ela não é necessária para ter compatibilidade com o windows
+O exe produzido sempre terá a extensão .exe, mesmo no linux onde ela não é necessária, isso serve apenas para o script também funcionar no windows
 
 E por fim, lembrando que o projeto compila tanto c como c++, você pode trocar o arquivo main.c por um main.cpp
 
