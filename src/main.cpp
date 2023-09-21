@@ -20,6 +20,8 @@ int snake_y = 0;
 int snake_tail_x = 0;
 int snake_tail_y = 0;
 
+int snake_user_dir = 0;
+
 int snake_dir = 0;
 int snake_tail_dir = 0;
 
@@ -68,6 +70,7 @@ void shrink_snake_tail() {
 
 void thread_main() {
     do {
+        snake_dir = snake_user_dir;
         // get next block
         char next = screen[snake_y + SNAKE_DIR_Y_TABLE[snake_dir]][snake_x + SNAKE_DIR_X_TABLE[snake_dir]][0];
         
@@ -146,10 +149,10 @@ int main() {
         if (shutdown) break;
         switch (c)
         {
-        case 'A': if (snake_dir != 1) snake_dir = 3; break;
-        case 'B': if (snake_dir != 3) snake_dir = 1; break;
-        case 'C': if (snake_dir != 2) snake_dir = 0; break;
-        case 'D': if (snake_dir != 0) snake_dir = 2; break;
+        case 'A': if (snake_dir != 1) snake_user_dir = 3; break;
+        case 'B': if (snake_dir != 3) snake_user_dir = 1; break;
+        case 'C': if (snake_dir != 2) snake_user_dir = 0; break;
+        case 'D': if (snake_dir != 0) snake_user_dir = 2; break;
         case 'q': {
             shutdown = true;
             break;
