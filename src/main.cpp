@@ -8,10 +8,10 @@ using namespace std::literals::chrono_literals;
 
 constexpr auto tick_time = 100ms;
 
-//#include "level_0.hpp"
+#include "level_0.hpp"
 //#include "level_1.hpp"
 //#include "level_2.hpp"
-#include "level_3.hpp"
+//#include "level_3.hpp"
 
 constexpr char SNAKE_HEAD = '@';
 constexpr char SNAKE_TAIL = '~';
