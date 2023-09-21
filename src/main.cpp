@@ -6,14 +6,20 @@
 
 using namespace std::literals::chrono_literals;
 
-const auto tick_time = 100ms;
+constexpr auto tick_time = 100ms;
 
-const size_t WIDTH = 20;
-const size_t HEIGHT = 20;
+//#include "level_0.hpp"
+//#include "level_1.hpp"
+//#include "level_2.hpp"
+#include "level_3.hpp"
 
-const int SNAKE_DIR_X_TABLE[4] = {1, 0, -1, 0};
-const int SNAKE_DIR_Y_TABLE[4] = {0, 1, 0, -1};
-const char SNAKE_BODY_TABLE[4] = {'>', 'v', '<', '^'};
+constexpr char SNAKE_HEAD = '@';
+constexpr char SNAKE_TAIL = '~';
+constexpr char SNAKE_BODY[4] = {'>', 'v', '<', '^'};
+constexpr char APPLE = '*';
+
+constexpr int SNAKE_DIR_X_TABLE[4] = {1, 0, -1, 0};
+constexpr int SNAKE_DIR_Y_TABLE[4] = {0, 1, 0, -1};
 
 int snake_x = 1;
 int snake_y = 0;
@@ -37,7 +43,7 @@ void spawn_apple() {
         x = rand() % WIDTH;
         y = rand() % HEIGHT;
     } while (screen[y][x][0] != '.');
-    screen[y][x][0] = '*';
+    screen[y][x][0] = APPLE;
 }
 
 void shrink_snake_tail() {
@@ -57,15 +63,15 @@ void shrink_snake_tail() {
     // calculate new snake tail direction
     switch (screen[snake_tail_y][snake_tail_x][0])
     {
-    case '>': snake_tail_dir = 0; break;
-    case 'v': snake_tail_dir = 1; break;
-    case '<': snake_tail_dir = 2; break;
-    case '^': snake_tail_dir = 3; break;
-    case '@': snake_tail_dir = snake_dir; break;
+    case SNAKE_BODY[0]: snake_tail_dir = 0; break;
+    case SNAKE_BODY[1]: snake_tail_dir = 1; break;
+    case SNAKE_BODY[2]: snake_tail_dir = 2; break;
+    case SNAKE_BODY[3]: snake_tail_dir = 3; break;
+    case SNAKE_HEAD: snake_tail_dir = snake_dir; break;
     }
 
     // draw snake tail
-    screen[snake_tail_y][snake_tail_x][0] = '~';
+    screen[snake_tail_y][snake_tail_x][0] = SNAKE_TAIL;
 }
 
 void thread_main() {
@@ -74,13 +80,13 @@ void thread_main() {
         // get next block
         char next = screen[snake_y + SNAKE_DIR_Y_TABLE[snake_dir]][snake_x + SNAKE_DIR_X_TABLE[snake_dir]][0];
         
-        if (next != '*') {
+        if (next != APPLE) {
             shrink_snake_tail();
         }
 
         if (snake_tail_x != snake_x || snake_tail_y != snake_y) {
             // draw snake body
-            screen[snake_y][snake_x][0] = SNAKE_BODY_TABLE[snake_dir];
+            screen[snake_y][snake_x][0] = SNAKE_BODY[snake_dir];
         }
 
         // move snake head
@@ -99,14 +105,14 @@ void thread_main() {
         // interact with environment
         if (screen[snake_y][snake_x][0] == '.') {
             // move normally
-        } else if (screen[snake_y][snake_x][0] == '*') {
+        } else if (screen[snake_y][snake_x][0] == APPLE) {
             // eat apple
             apple_eaten = true;
         } else {
             died = true;
         }
 
-        screen[snake_y][snake_x][0] = '@';
+        screen[snake_y][snake_x][0] = SNAKE_HEAD;
 
         if (apple_eaten) {
             points++;
@@ -115,6 +121,10 @@ void thread_main() {
 
         // render
         printf("\033[H\033[2J");
+        printf("SNAKE! https://github.com/kernel32dev/cobrinha-c\r\n");
+        printf("MAPA: %s\r\n", LEVEL_NAME);
+        printf("setas para virar, \"qq\" para sair\r\n");
+        printf("edite main.cpp para customizar o jogo!\r\n");
         fwrite(screen, sizeof(char), sizeof(screen), stdout);
         printf("pontos: %i\r\n", points);
         if (died) {
@@ -131,15 +141,15 @@ int main() {
 
     for (size_t y = 0; y < HEIGHT; y++) {
         for (size_t x = 0; x < WIDTH; x++) {
-            screen[y][x][0] = '.';
+            screen[y][x][0] = LEVEL[x + y * WIDTH];
             screen[y][x][1] = ' ';
         }
         screen[y][WIDTH][0] = '\r';
         screen[y][WIDTH][1] = '\n';
     }
 
-    screen[snake_tail_y][snake_tail_x][0] = '~';
-    screen[snake_y][snake_x][0] = '@';
+    screen[snake_tail_y][snake_tail_x][0] = SNAKE_TAIL;
+    screen[snake_y][snake_x][0] = SNAKE_HEAD;
 
     spawn_apple();
 
